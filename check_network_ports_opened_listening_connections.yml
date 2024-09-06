@@ -1,0 +1,29 @@
+---
+- name: Gather Network Connections
+  hosts: all
+  become: yes
+  tasks:
+    - name: Get network connections and listening ports
+      ansible.builtin.command:
+        cmd:  netstat -lptn
+      register: netstat_output
+      changed_when: false
+
+    - name: Print network connections output
+      ansible.builtin.set_fact:
+        var_net_connection: "{{ netstat_output.stdout_lines | select('search', 'tcp') | list | first | default('Not Found')}}"
+
+    - name: Extraer 'Size' de /var
+      ansible.builtin.set_fact:
+        var_port: "{{ var_net_connection.split()[3] }}"
+        var_state: "{{ var_net_connection.split()[5] }}"
+        var_pid: "{{ var_net_connection.split()[6] }}"
+
+
+    - name: Display /root filesystem information
+      ansible.builtin.debug:
+        msg:
+          - "port: {{ var_port }}"
+          - "state: {{ var_state }}"
+          - "pid: {{ var_pid }}"
+
