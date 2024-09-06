@@ -1,0 +1,159 @@
+---
+- name: "Obtain Info Hosts RHEL"
+  hosts: all
+  gather_facts: true
+  vars_files:
+    - vars/rhs_vars.yml
+  tasks:
+
+    - name: Obtención de Versión de SO
+      ansible.builtin.set_fact:
+        so_version_servers_rhel: "{{ ansible_distribution }}"
+        distribution_release: "{{ ansible_distribution_release }}"
+        distribution_version: "{{ ansible_distribution_version }}"
+
+    - name: Obtencion de Arquitectura
+      ansible.builtin.set_fact:
+        machine_architecture: "{{ ansible_architecture }}"
+
+    - name: Obtencion hardware Procesador
+      ansible.builtin.set_fact:
+        number_vcpu: "{{ ansible_processor_vcpus  }}"
+        procesador: "{{ ansible_processor }}"
+
+    - name: Obtención de Hostname
+      ansible.builtin.set_fact:
+        hostname_servers_rhel: "{{ ansible_nodename }}"
+
+    - name: Obtención de IP
+      ansible.builtin.set_fact:
+        ip_servers_rhel: "{{ ansible_default_ipv4.address }}"
+
+    - name: Obtener Memoria
+      ansible.builtin.set_fact:
+        total_memory: "{{ ansible_memtotal_mb }}" 
+        used_memory: "{{ ansible_memtotal_mb - ansible_memfree_mb  }} "
+        free_memory: "{{ ansible_memfree_mb }} "
+  
+    - name: Obtener uptime en segundos
+      ansible.builtin.set_fact:
+        uptime_seconds: "{{ ansible_uptime_seconds }}"
+
+    - name: Obtener info de FS
+      ansible.builtin.command: df -h
+      register: df_output
+      changed_when: false
+
+    - name: Filtrar /var
+      ansible.builtin.set_fact:
+        var_fs: "{{ df_output.stdout_lines | select('search', '/var') | list | first | default('Not Found') }}"
+
+    - name: Filtrar /usr
+      ansible.builtin.set_fact:
+        usr_fs: "{{ df_output.stdout_lines | select('search', '/usr') | list | first | default('Not Found') }}"
+
+    - name: Filtrar /root
+      ansible.builtin.set_fact:
+        root_fs: "{{ df_output.stdout_lines | select('search', 'root') | list | first | default('Not Found') }}"
+
+    - name: Extraer 'Size' de /var
+      ansible.builtin.set_fact:
+        var_size: "{{ var_fs.split()[1] }}"
+
+    - name: Extraer 'Available' de /var
+      ansible.builtin.set_fact:
+        var_avail: "{{ var_fs.split()[3] }}"
+
+    - name: Extraer 'Size' de /usr
+      ansible.builtin.set_fact:
+        usr_size: "{{ usr_fs.split()[1] }}"
+
+    - name: Extraer 'Available' de /usr
+      ansible.builtin.set_fact:
+        usr_avail: "{{ usr_fs.split()[3] }}"
+
+    - name: Extraer 'Size' de /root
+      ansible.builtin.set_fact:
+        root_size: "{{ root_fs.split()[1] }}"
+
+    - name: Extraer 'Available' de /root
+      ansible.builtin.set_fact:
+        root_avail: "{{ root_fs.split()[3] }}"
+
+    - name: Obtener datos cpu con lscpu
+      ansible.builtin.command: lscpu
+      register: lscpu_output
+      changed_when: false
+
+    - name: Analizar el número de sockets y CPUs por socket
+      ansible.builtin.set_fact:
+        num_sockets: "{{ lscpu_output.stdout | regex_search('Socket\\(s\\):\\s+([0-9]+)', '\\1') | default(0) }}"
+        cpus_per_socket: "{{ lscpu_output.stdout | regex_search('Core\\(s\\) per socket:\\s+([0-9]+)', '\\1') | default(0) }}"
+
+    - name: Obtención de Repos Disponibles
+      ansible.builtin.command:
+        cmd: yum repolist all
+      register: repos_available
+      changed_when: false
+      become: true
+
+    - name: Imprimir de Repos Disponibles
+      ansible.builtin.debug:
+        var: repos_available.stdout_lines
+
+    - name: Imprimir Datos Obtenidos
+      ansible.builtin.debug:
+        msg:
+          - "Sistema operativo: {{ so_version_servers_rhel }} {{ distribution_release }} {{ distribution_version }}"
+          - "Architectura, {{ machine_architecture}}"
+          - "Num procesadores, {{ number_vcpu }}"
+          - "Procesador, {{ procesador }}"
+          - "Hostname, {{ hostname_servers_rhel }}"
+          - "IP, {{ ip_servers_rhel }}"
+          - "Mem total, {{ total_memory }}MB, Used memory, {{ used_memory}} MB, Free memory, {{ free_memory }} MB"
+          - "uptime info, {{ uptime_seconds }}"
+          - "Var available, {{ var_avail }}"
+          - "Usr available, {{ usr_avail }}"
+          - "Root available, {{ root_avail }}"
+          - "Var size, {{ var_size }}"
+          - "Usr size, {{ usr_size }}"
+          - "Root size, {{ root_size }}"
+          - "Num Sockets, {{ num_sockets }}"
+          - "CPUs por Socket, {{ cpus_per_socket }}"
+
+    - name: Generar archivo CSV con titulos
+      ansible.builtin.lineinfile:
+        path: /tmp/system_data.csv
+        line: "OS Version, Architecture, Num Processors,  Hostname, IP, Memory total, Memory used, Memory Free,  Uptime, Var Size, Var Available, Usr Size, Usr Available, Root Size, Root Available, Sockets, CPUs por Socket"
+        create: yes
+        state: present
+        insertafter: EOF
+      delegate_to: localhost
+      run_once: true
+
+    - name: Agregar contenido a CSV
+      ansible.builtin.lineinfile:
+        path: /tmp/system_data.csv
+        line: "{{ so_version_servers_rhel }} {{ distribution_release }} {{ distribution_version }}, {{ machine_architecture }}, {{ number_vcpu }}, {{ hostname_servers_rhel }}, {{ ip_servers_rhel }}, {{ total_memory }}, {{ used_memory }} , {{ free_memory }}, {{ uptime_seconds }}, {{ var_size }}, {{ var_avail }}, {{ usr_size }}, {{ usr_avail }}, {{ root_size }}, {{ root_avail }}, {{ num_sockets }}, {{ cpus_per_socket }} "
+        create: yes
+        state: present
+        insertafter: EOF
+      delegate_to: localhost
+
+    - name: Enviar reportes por e-mail
+      tags:
+        - always
+      delegate_to: localhost
+      run_once: true
+      community.general.mail:
+        host: "{{ smtp_host }}"
+        port: "{{ smtp_port }}"
+        username: "{{ smtp_user | default(omit) }}"
+        password: "{{ smtp_password | default(omit) }}"
+        from: "{{ mail_from }}"
+        to: "{{ mail_to }}"
+        subject: Inventario hosts migracion rhel7 to rhel8
+        body: "Se envia reporte de inventario de hosts previo a la migración"
+        subtype: html
+        attach:
+          - /tmp/system_data.csv
