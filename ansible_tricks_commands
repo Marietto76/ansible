@@ -1,0 +1,21 @@
+# dnf install pip
+# pip install ansible-lint
+
+
+# ansible-galaxy collection list
+# ansible-lint playbooks/patching_limit_and_request.yml
+
+/collections/requirements
+  collections:
+  - name: kubernetes.core
+
+/root/ansible.cfg
+  [defaults]
+  display_skipped_hosts = false
+  #inventory = inventories/inventory
+  inventory = inventory/desa/inventory
+  ###my definitions ##
+  roles_path = ./roles
+
+  
+
