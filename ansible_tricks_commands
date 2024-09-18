@@ -19,3 +19,8 @@
 
   
 
+[ansible@ecdevd2ldap-master ~]$ ssh-copy-id ansible@ecdevd2ldap-master.day2.com
+hacer el ssh copy id al propio host
+
+
+cambiar la ip address de /32 a /24
