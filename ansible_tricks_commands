@@ -24,3 +24,12 @@ hacer el ssh copy id al propio host
 
 
 cambiar la ip address de /32 a /24
+
+mpepinos@fedora:~/bp_devops/ans-aut-arqPlataf-directory_server$ sudo adduser ansible
+mpepinos@fedora:~/bp_devops/ans-aut-arqPlataf-directory_server$ sudo passwd ansible
+
+echo "ansible ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ansible
+
+ssh-keygen -t rsa -b 2048
+
+ssh-copy-id ansible_user@remote_machine
