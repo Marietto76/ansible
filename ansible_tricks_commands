@@ -17,7 +17,7 @@
   ###my definitions ##
   roles_path = ./roles
 
-  
+ ansible-galaxy collection install ansible.posix 
 
 [ansible@ecdevd2ldap-master ~]$ ssh-copy-id ansible@ecdevd2ldap-master.day2.com
 hacer el ssh copy id al propio host
