@@ -1,0 +1,35 @@
+---
+- hosts: source_idm
+  become: true
+  tasks:
+    - name: Find files in the backup directory
+      shell: "ls /var/lib/ipa/backup/*"
+      register: dataFiles
+
+    - name: Ensure directory has correct permissions
+      file:
+        path: /var/lib/ipa/backup
+        state: directory
+        mode: '0755'
+
+    - name: Debug the file list
+      debug:
+        var: dataFiles.stdout_lines
+
+    - name: Fetch All Files
+      fetch:
+        src: "{{ item }}"
+        dest: /home/ansible/DIRFiles/
+        flat: yes  # Set to 'yes' if you want to avoid creating a directory structure
+      with_items: "{{ dataFiles.stdout_lines }}"
+
+
+- hosts: target_idm
+  become: true
+  tasks:
+
+    - name: Copy the most recent ipa-data-2024 directory to /tmp on target_idm
+      ansible.builtin.copy:
+        src: /home/ansible/DIRFiles/
+        dest: /tmp/backup-ipa/
+        remote_src : false
