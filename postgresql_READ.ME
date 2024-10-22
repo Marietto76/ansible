@@ -24,6 +24,43 @@ ansible-vault encrypt_string soporte12345678 --name 'postgresql_password'
           37303963633432363232653737323539396237383564396364396538336261333931333561623637
           6563386232326261630a373635373436353237353064373437623935623736396330343536386133
           3630
+
+    postgresql_pg_hba_conf:
+      - type: local
+        database: all
+        user: all
+        auth_method: md5
+      - type: host
+        database: all
+        user: all
+        address: '127.0.0.1/32'
+        auth_method: md5
+      - type: host
+        database: all
+        user: all
+        address: '192.168.222.0/24'
+        auth_method: md5
+      - type: host
+        database: all
+        user: all
+        address: 'aapgateway1.corp.daytwo.cloud'
+        auth_method: md5
+      - type: host
+        database: all
+        user: all
+        address: 'aaphub1.corp.daytwo.cloud'
+        auth_method: md5
+      - type: host
+        database: all
+        user: all
+        address: 'aapeda1.corp.daytwo.cloud'
+        auth_method: md5
+      - type: host
+        database: all
+        user: all
+        address: '::1/128'
+        auth_method: md5
+
   tasks:
   - name: Configure postgresql using role
     import_role:
@@ -31,3 +68,24 @@ ansible-vault encrypt_string soporte12345678 --name 'postgresql_password'
     become: yes
     become_user: root
 
+
+  - name: Create a new database with name "automationhubdb"
+    community.postgresql.postgresql_db:
+      name: automationhubdb
+      comment: My automation hub db
+
+  - name: Create a new database with name "automationhubdb"
+    community.postgresql.postgresql_db:
+      name: eventdrivendb
+      comment: My eventdrivendb
+
+
+  - name: Create a new database with name "automationhubdb"
+    community.postgresql.postgresql_db:
+      name: gatewaydb
+      comment: My gatewaydb
+
+  - name: Create a new database with name "automationhubdb"
+    community.postgresql.postgresql_db:
+      name: controllerdb
+      comment: My controller db
