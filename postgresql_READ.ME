@@ -1,7 +1,12 @@
+pg hba.conf
 
+host    all             all             192.168.222.0/24       md5
+host    all             all             host1.example.com      md5
+host    all             all             host2.example.com      md5
 
 
 ansible-playbook -i inventory playbook.yml --ask-vault-pass
+##el password q puse fue del 1-8
 ansible-vault encrypt_string soporte12345678 --name 'postgresql_password'
 
 - name: Manage postgres
