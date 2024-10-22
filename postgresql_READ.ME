@@ -6,7 +6,7 @@ host    all             all             host2.example.com      md5
 
 ansible-galaxy collection install -vv -r meta/collection-requirements.ym
 ansible-galaxy collection install community.postgresql
-
+sudo dnf install python3-pip
 
 ansible-playbook -i inventory playbook.yml --ask-vault-pass
 ##el password q puse fue del 1-8
