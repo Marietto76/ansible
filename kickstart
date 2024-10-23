@@ -1,0 +1,45 @@
+con 6gb minimo t deja la partición /   si no no deja instalar el rhel 9.4
+
+NAME          MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sr0            11:0    1 1024M  0 rom  
+vda           252:0    0   50G  0 disk 
+├─vda1        252:1    0    1G  0 part /boot
+└─vda2        252:2    0   49G  0 part 
+  ├─rhel-root 253:0    0   44G  0 lvm  /
+  └─rhel-swap 253:1    0    5G  0 lvm  [SWAP]
+
+
+
+lang en_US
+keyboard --xlayouts='us'
+timezone America/New_York --utc
+rootpw $2b$10$WGuQdbAKkgwk6dS0sApFx.bcFp4y2b3NZz3UmU7XiMmbYBuvTgBB6 --iscrypted
+reboot
+cdrom
+bootloader --append="rhgb quiet crashkernel=1G-4G:192M,4G-64G:256M,64G-:512M"
+zerombr
+clearpart --all --initlabel
+part /boot --fstype=xfs --ondisk=vda --size=1024
+volgroup rhel pv.01
+part pv.01 --fstype=lvmpv --ondisk=vda --size=50176
+logvol / --vgname=rhel --name=rhel-root --fstype=xfs --size=45056
+logvol swap --vgname=rhel --name=rhel-swap --fstype=xfs --size=5120
+####!!aqui entrarian los otros log vol  
+##logvol /var/crash etc.
+
+network --hostname=aapsql1.day2.corp.cloud --bootproto=static --ip=192.168.222.46 --netmask=255.255.255.0 --gateway=192.168.222.1 --nameserver=192.168.222.1
+skipx
+firstboot --disable
+selinux --enforcing
+firewall --enabled
+%addon com_redhat_oscap
+content-type = scap-security-guide
+profile = xccdf_org.ssgproject.content_profile_pci-dss
+%end
+%packages
+@^minimal-environment
+kexec-tools
+%end
+
+
+
