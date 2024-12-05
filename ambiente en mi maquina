@@ -1,3 +1,15 @@
 en mi laptop puedo editar los archivos con mi usuario mpepinos
 pero puedo ejecutar con el usuario 'ansible'
 como hacer para que mi usuario y ansible puedan editar los archivos?
+
+
+incluir al ansible user en el grupo de mpepinos
+add the ansible user to the group of the mpepinos user for shared editing:
+
+sudo usermod -aG mpepinos ansible
+
+sudo chmod -R g+rw /path/to/files
+
+
+
+
