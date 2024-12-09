@@ -1,0 +1,62 @@
+- name: Manage postgres
+  hosts: aap_postgres
+  become: yes
+  vars:
+    postgresql_version: "15"
+    postgresql_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          64643031316161386463306638383434626233303138366232643266326330636564326537346136
+          3537306465633138396436303239653131346134323537390a633363333439656564363761393032
+          37303963633432363232653737323539396237383564396364396538336261333931333561623637
+          6563386232326261630a373635373436353237353064373437623935623736396330343536386133
+          3630
+
+    postgresql_pg_hba_conf:
+      - type: local
+        database: all
+        user: all
+        auth_method: trust
+      - type: host
+        database: all
+        user: all
+        address: '127.0.0.1/32'
+        auth_method: trust
+      - type: host
+        database: all
+        user: all
+        address: '::1/128'
+        auth_method: trust
+
+  tasks:
+  - name: Configure postgresql using role
+    import_role:
+      name: linux-system-roles.postgresql
+    become: yes
+    become_user: root
+
+
+  - name: Create a new database with name "automationhubdb"
+    become: yes
+    community.postgresql.postgresql_db:
+      name: automationhubdb
+      comment: My automation hub db
+
+  - name: Create a new database with name "automationhubdb"
+    
+    become: yes
+    community.postgresql.postgresql_db:
+      name: eventdrivendb
+      comment: My eventdrivendb
+
+
+  - name: Create a new database with name "automationhubdb"
+    become_user: postgres
+    become: yes
+    community.postgresql.postgresql_db:
+      name: gatewaydb
+      comment: My gatewaydb
+
+  - name: Create a new database with name "automationhubdb"
+    community.postgresql.postgresql_db:
+      name: controllerdb
+      comment: My controller db

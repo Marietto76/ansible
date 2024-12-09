@@ -1,0 +1,17 @@
+- name: Install IdM
+  hosts: aap_kvm_25
+  become: true
+  
+  tasks:
+  
+    - name: Install ansible-core, wget, git-core, rsync, and vim
+      ansible.builtin.dnf:
+        name:
+          - ansible-core
+          - wget
+          - git-core
+          - rsync
+          - vim
+          - python3
+        state: present
+

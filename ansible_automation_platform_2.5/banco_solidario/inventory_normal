@@ -1,0 +1,16 @@
+------
+[aap_postgres]
+192.168.124.25
+
+[aap_haproxy]
+aaphaproxy1.corp.daytwo.cloud
+
+[aap_kvm_25]
+
+aapgateway1.corp.daytwo.cloud
+aapcontroller1.corp.daytwo.cloud
+aapexecutor1.corp.daytwo.cloud
+aaphub1.corp.daytwo.cloud
+aapeda1.corp.daytwo.cloud
+aappsql1.corp.daytwo.cloud
+aaphaproxy1.corp.daytwo.cloud

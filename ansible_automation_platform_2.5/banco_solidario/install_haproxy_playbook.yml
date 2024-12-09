@@ -1,0 +1,33 @@
+- name: Manage haproxy
+  hosts: aap_haproxy
+  become: yes
+  
+  vars:
+   
+  tasks:
+
+      - name: Install haproxy software
+        ansible.builtin.package:
+            name: "haproxy"
+            state: present
+
+#      - name: Copying my own configuration file
+#        ansible.builtin.template:
+#            src: "default_haproxy.cfg"
+#            dest: "/etc/haproxy/haproxy.cfg"
+#        notify: restart lbserver
+
+      - name: Starting load balancer service
+        ansible.builtin.service:
+            name: "haproxy"
+            state: started
+
+      - name: Enable server in 'www' backend pool wait until healthy. Retry 10 times with intervals of 5 seconds to retrieve the health
+        community.general.haproxy:
+            state: enabled
+            host: aapgateway1.corp.daytwo.cloud
+            backend: aapgateway
+            socket: /var/run/haproxy.pid
+            wait: true
+            wait_retries: 10
+            wait_interval: 5
