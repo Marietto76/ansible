@@ -31,5 +31,7 @@ mpepinos@fedora:~/bp_devops/ans-aut-arqPlataf-directory_server$ sudo passwd ansi
 echo "ansible ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ansible
 
 ssh-keygen -t rsa -b 2048
+ssh-keygen -t rsa -b 4096
+
 
 ssh-copy-id ansible_user@remote_machine
