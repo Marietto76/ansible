@@ -1,0 +1,8 @@
+echo 1 > /sys/class/block/sdb/device/rescan
+parted /dev/sda print
+resizepart 3 100%
+pvresize /dev/sda3
+vgextend  rhel /dev/sda3
+lvextend -L +5G /dev/rhel/tmp
+xfs_growfs /dev/rhel/tmp
+systemctl daemon-reload

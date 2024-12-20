@@ -77,7 +77,7 @@ bundle_dir=/home/ansible/redhatpackages/ansible-automation-platform-containerize
 # https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation/appendix-inventory-files-vars#ref-gateway-variables
 # -----------------------------------------------------
 gateway_admin_password=soporte
-gateway_pg_host=aappsql1.corp.daytwo.cloud
+gateway_pg_host=SRVUIOPRANS13.bscluster.int
 gateway_pg_database=gatewaydb
 gateway_pg_username=daytwo
 gateway_pg_password=soporte12345678
@@ -86,7 +86,7 @@ gateway_pg_password=soporte12345678
 # https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation/appendix-inventory-files-vars#ref-controller-variables
 # -----------------------------------------------------
 controller_admin_password=soporte
-controller_pg_host=aappsql1.corp.daytwo.cloud
+controller_pg_host=SRVUIOPRANS13.bscluster.int
 controller_pg_database=controllerdb
 controller_pg_username=daytwo
 controller_pg_password=soporte12345678
@@ -98,7 +98,7 @@ controller_license_file=/home/ansible/redhatpackages/ansible-automation-platform
 # https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation/appendix-inventory-files-vars#ref-hub-variables
 # -----------------------------------------------------
 hub_admin_password=soporte
-hub_pg_host=aappsql1.corp.daytwo.cloud
+hub_pg_host=SRVUIOPRANS13.bscluster.int
 hub_pg_database=automationhubdb
 hub_pg_username=daytwo
 hub_pg_password=soporte12345678
@@ -107,7 +107,7 @@ hub_pg_password=soporte12345678
 # https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation/appendix-inventory-files-vars#event-driven-ansible-controller
 # -----------------------------------------------------
 eda_admin_password=soporte
-eda_pg_host=aappsql1.corp.daytwo.cloud
+eda_pg_host=SRVUIOPRANS13.bscluster.int
 eda_pg_database=eventdrivendb
 eda_pg_username=daytwo
 eda_pg_password=soporte12345678

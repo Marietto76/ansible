@@ -1,16 +1,33 @@
 ------
 [aap_postgres]
-192.168.124.25
+10.110.3.120
 
 [aap_haproxy]
-aaphaproxy1.corp.daytwo.cloud
+SRVUIOPRANS02.bscluster.int
 
 [aap_kvm_25]
 
-aapgateway1.corp.daytwo.cloud
-aapcontroller1.corp.daytwo.cloud
-aapexecutor1.corp.daytwo.cloud
-aaphub1.corp.daytwo.cloud
-aapeda1.corp.daytwo.cloud
-aappsql1.corp.daytwo.cloud
-aaphaproxy1.corp.daytwo.cloud
+SRVUIOPRANS03.bscluster.int
+SRVUIOPRANS04.bscluster.int
+
+SRVUIOPRANS09.bscluster.int
+SRVUIOPRANS10.bscluster.int
+
+SRVUIOPRANS11.bscluster.int
+SRVUIOPRANS12.bscluster.int
+
+
+SRVUIOPRANS05.bscluster.int
+SRVUIOPRANS06.bscluster.int
+
+
+SRVUIOPRANS07.bscluster.int
+SRVUIOPRANS08.bscluster.int
+
+
+SRVUIOPRANS13.bscluster.int
+SRVUIOPRANS14.bscluster.int
+
+SRVUIOPRANS02.bscluster.int
+
+

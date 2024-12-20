@@ -25,7 +25,7 @@
       - name: Enable server in 'www' backend pool wait until healthy. Retry 10 times with intervals of 5 seconds to retrieve the health
         community.general.haproxy:
             state: enabled
-            host: aapgateway1.corp.daytwo.cloud
+            host: SRVUIOPRANS03.bscluster.int
             backend: aapgateway
             socket: /var/run/haproxy.pid
             wait: true
