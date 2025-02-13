@@ -1,0 +1,19 @@
+- name: Clone a VM
+  community.vmware.vmware_guest:
+    hostname: "{{ vmware.vcenter_hostname }}"
+    username: "{{ vmware.vcenter_username }}"
+    password: "{{ vmware.vcenter_password }}"
+    datacenter: "{{ source.datacenter }}"
+    cluster: "{{ source.cluster }}"
+    folder: "{{ source.folder }}"
+    validate_certs: false
+    template: "{{ source.vm_name }}"
+    name: "{{ cloned.vm_name }}"
+    networks:
+      - name: "{{ cloned.network }}"
+        adapter_type: "vmxnet3"
+        connected: false
+        start_connected: false
+    customization:
+      autologon: false
+  delegate_to: localhost

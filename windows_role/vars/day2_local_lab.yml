@@ -1,0 +1,68 @@
+## Conexión al vmware.
+
+##vmware
+
+vcenter_validate_certs: false
+
+##vmware daytwo
+vmware:
+  vcenter_hostname: "vcenter.openshift.daytwo.cloud"
+  vcenter_username: "Administrator@vsphere.local"
+  vcenter_password: "VMware1!"
+  datacenter_name: "Datacenter"
+  cluster: "Cluster"
+  vcenter_validate_certs: false
+  datastore:  ''
+
+windows:
+  ad_account: "AD\\Administrator"
+  ad_account_password: "RedHat1!"
+  local_account: "Administrator"
+  local_account_password: "RedHat1!"
+  arbol: "ad.corp.daytwo.cloud"
+  domain_ou_path: "CN=computers,DC=ad,DC=corp,DC=daytwo,DC=cloud"
+
+###original machine
+source:
+  vm_name: "WINQAUIOSRV01"
+  network_name: "VM Network"
+  folder: "DayTwo"
+  datacenter: "Datacenter"
+  cluster: "Cluster"
+  
+
+####cloned machine
+
+cloned:
+  vm_name: "WINQATESTFIN"
+  vm_network: "VM Network"
+  vm_datastore: "datastore1"
+  datacenter: "Datacenter"
+  disk: ""
+  hardware: ""
+  folder: "DayTwo"
+  ip_address: "192.168.67.101"
+  default_gateway: "192.168.67.1"
+  prefixlength: "24"
+  dns_server: "192.168.67.230"
+  interface_alias: "Ethernet0"
+
+
+##winrm vars
+
+
+#1.  variables de conectarme al vmware
+#2.  variables de la vm a clonar.
+#3.  variables de la vm clonada.
+#
+#
+#
+#4. credenciales.
+#  vmware_ guardada en ansible.
+  
+
+
+
+  
+
+

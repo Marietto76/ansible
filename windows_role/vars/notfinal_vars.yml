@@ -1,0 +1,38 @@
+iis_test_message: "<h1>Welcome to IIS hosted by Ansible!</h1>"
+
+ansible_connection: winrm
+ansible_port: 5985
+ansible_winrm_server_cert_validation: ignore
+ansible_winrm_transport: ntlm
+
+ansible_user: "AD\\Administrator"
+ansible_password: RedHat1!
+
+
+win_domain_admin_user: Administrator
+win_domain_admin_password: RedHat1!
+
+
+
+##-----------
+
+    #local defined variables
+    vm_name: "{{ survey_vm_name_to_clone }}"
+    vm_name_cloned: "{{ survey_vm_cloned_name }}"
+
+    vcenter_validate_certs: false
+    
+    cluster: BS_PRO
+    folder: "{{ survey_vm_folder }}"
+    datacenter: BS_UIO
+    datastore: "{{ survey_vm_datastore }}"
+    network: "{{ survey_vm_portgroup }}"
+
+    #credential survey defined variables
+
+    vmware:
+      vcenter_hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+      vcenter_username: '{{ lookup("env", "VMWARE_USER") }}'
+      vcenter_password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+  
+  

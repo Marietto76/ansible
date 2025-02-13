@@ -1,0 +1,17 @@
+- name: Change windows machine name
+  community.vmware.vmware_vm_shell:
+    hostname: "{{ vmware.vcenter_hostname }}"
+    username: "{{ vmware.vcenter_username }}"
+    password: "{{ vmware.vcenter_password }}"
+    validate_certs: false
+    vm_id: "{{ cloned.vm_name }}"
+    vm_username: "{{ windows.local_account }}"
+    vm_password: "{{ windows.local_account_password }}"
+    vm_shell: "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+    vm_shell_args: " -Command New-VMName = New_VM_Name;
+    $Username2 = '{{ windows.local_account }}';
+    $Password = '{{ windows.local_account_password }}' ;
+    $pass = ConvertTo-SecureString -AsPlainText $Password -Force;
+    $SecureString = $pass;
+    $Mylocal = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $Username2,$SecureString;
+    Rename-Computer -NewName {{ cloned.vm_name }} -LocalCredential $Mylocal -Force -PassThru -Restart;"

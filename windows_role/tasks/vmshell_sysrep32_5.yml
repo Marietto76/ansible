@@ -1,0 +1,33 @@
+- name: Read the unattended.xml file
+  ansible.builtin.slurp:
+    src: ../files/unattended.xml
+  register: unattended_content
+
+- name: Create directory and file in windows for sysprep
+  community.vmware.vmware_vm_shell:
+    hostname: "{{ vmware.vcenter_hostname }}"
+    username: "{{ vmware.vcenter_username }}"
+    password: "{{ vmware.vcenter_password }}"
+    validate_certs: false
+    vm_id: "{{ cloned.vm_name }}"
+    vm_username: "{{ windows.local_account }}"
+    vm_password: "{{ windows.local_account_password }}"
+    vm_shell: "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+    #vm_shell_args: "-Command New-Item -ItemType File -Path C:\\example.txt -Force"
+    vm_shell_args: "-Command New-Item -ItemType Directory -Path C:\\tools;
+    New-Item -ItemType File -Path C:\\tools\\unattended.xml;
+    $content = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('{{ unattended_content.content }}'));
+    Set-Content -Path C:\\tools\\unattended.xml -Value $content -Encoding UTF8"
+
+- name: Executing Sysprep
+  community.vmware.vmware_vm_shell:
+    hostname: "{{ vmware.vcenter_hostname }}"
+    username: "{{ vmware.vcenter_username }}"
+    password: "{{ vmware.vcenter_password }}"
+    validate_certs: false
+    vm_id: "{{ cloned.vm_name }}"
+    vm_username: "{{ windows.local_account }}"
+    vm_password: "{{ windows.local_account_password }}"
+    vm_shell: "C:\\Windows\\System32\\Sysprep\\Sysprep.exe"
+    vm_shell_args: "/oobe /reboot /unattend:C:\\tools\\unattended.xml"
+

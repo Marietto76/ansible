@@ -1,0 +1,20 @@
+# tasks file for windows_role
+
+
+- name: Clone a virtual machine
+  hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - ../vars/{{ ambiente }}.yml
+
+  tasks:
+
+##1 clonar maquina prendida.
+
+    - name: Clone Windows VM
+      include_tasks: ../tasks/vmshell_tasks_join_domain_7_1.yml
+
+    - name: Wait for cloning to complete (timeout)
+      wait_for:
+        timeout: 60  # 180 seconds = 3 minutes

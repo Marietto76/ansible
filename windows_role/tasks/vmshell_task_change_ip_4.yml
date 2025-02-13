@@ -1,0 +1,14 @@
+- name: Change Windows IP, gateway, set dns
+  community.vmware.vmware_vm_shell:
+    hostname: "{{ vmware.vcenter_hostname }}"
+    username: "{{ vmware.vcenter_username }}"
+    password: "{{ vmware.vcenter_password }}"
+    validate_certs: false
+    vm_id: "{{ cloned.vm_name }}"
+    vm_username: "{{ windows.local_account }}"
+    vm_password: "{{ windows.local_account_password }}"
+    vm_shell: "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+    vm_shell_args: "-Command Remove-NetIPAddress -InterfaceAlias {{ cloned.interface_alias }} -Confirm:$false;
+    Remove-NetRoute -InterfaceAlias {{ cloned.interface_alias }} -Confirm:$false;
+    New-NetIpAddress -IpAddress '{{ cloned.ip_address }}' -PrefixLength 24 -DefaultGateway '{{ cloned.default_gateway }}' -InterfaceAlias {{ cloned.interface_alias }};
+    Set-DnsCliensssstServerAddress -InterfaceAlias {{ cloned.interface_alias }} -ServerAddresses ('{{ cloned.dns_server }}');"

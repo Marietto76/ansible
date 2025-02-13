@@ -1,0 +1,10 @@
+- name: Join host to domain with automatic reboot
+  microsoft.ad.membership:
+    dns_domain_name: "{{ windows.arbol }}"
+    hostname: "{{ cloned.vm_name }}"
+    domain_admin_user: "Administrator@{{ windows.arbol }}"
+    domain_admin_password: "{{ windows.ad_account_password }}"
+    domain_ou_path: "{{ windows.domain_ou_path }}"
+    state: domain
+    reboot: true
+  register: domain_addition

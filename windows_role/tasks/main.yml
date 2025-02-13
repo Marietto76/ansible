@@ -1,0 +1,88 @@
+# tasks file for windows_role
+
+
+- name: Clone a virtual machine
+  hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - ../vars/{{ ambiente }}.yml
+
+  tasks:
+
+##1 clonar maquina prendida.
+
+    - name: Clonar vm
+      include_tasks: vm_normal_clone_1.yml
+
+    - name: Wait for cloning to complete (timeout)
+      wait_for:
+        timeout: 120  # 2 minutes
+
+## se prende sin red, con la maquina clonada
+
+##2 saco de dominio
+
+    - name: Unjoin windows machine from domain controller
+      include_tasks: vmshell_tasks_unjoin_domain_2.yml
+
+
+    - name: Wait for unjoin process to complete (timeout)
+      wait_for:
+        timeout: 120 # 2 minutes
+
+##se reinicia
+
+##3 cambio de nombre
+
+
+    - name: Change windows machine name
+      include_tasks: vmshell_change_machine_name_3.yml
+
+
+    - name: Wait for name change to complete (timeout)
+      wait_for:
+        timeout: 120  # 2 min
+
+## se reinicia
+
+##4 change ip
+
+    - name: Change machine ip, gateway, dns of windows machine
+      include_tasks: vmshell_task_change_ip_4.yml
+
+    - name: Wait for change network configuration to complete (timeout)
+      wait_for:
+        timeout: 40 # 40segundos
+
+##5 sysprep32
+
+
+    - name: Sysprep32
+      include_tasks: vmshell_sysrep32_5.yml
+
+    - name: Wait for sysprep to complete (timeout)
+      wait_for:
+        timeout: 150 # 1 min a 30 seconds
+##se reinicia servidor
+
+##como hacer q coloque el password del admin
+
+
+##conectar el adaptador de vmware en caliente.
+
+    - name: Connect adapter of windows machine 
+      include_tasks: connect_adapter_final_6.yml
+
+    - name: Wait for connect network adapter for recover connection again (timeout)
+      wait_for:
+        timeout: 40 # 40seconds
+
+    - name: Join Windows to domain controller
+      import_tasks: vmshell_tasks_join_domain_7.yml
+
+
+    - name: Wait for join windows to complete (timeout)
+      wait_for:
+        timeout: 120  # 2 min
+
