@@ -1,0 +1,51 @@
+---
+- name: Configure SNMP on RHEL 8 Servers
+  hosts: localhost
+  become: true
+  vars:
+    community_string: "bs_public"  # Replace with your desired SNMP community
+    snmpd_config_path: "/etc/snmp/snmpd.conf"
+  tasks:
+    - name: Install SNMP packages
+      package:
+        name:
+          - net-snmp
+          - net-snmp-utils
+        state: present
+
+    - name: Backup the original snmpd.conf file
+      copy:
+        src: "{{ snmpd_config_path }}"
+        dest: "{{ snmpd_config_path }}.bak"
+        remote_src: yes
+
+    - name: Configure SNMP community in snmpd.conf
+      blockinfile:
+        path: "{{ snmpd_config_path }}"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - SNMP Configuration"
+        block: |
+          # Configured by Ansible
+          rocommunity {{ community_string }}
+          com2sec notConfigUser  default    {{ community_string }}
+          view    all     included        .1
+
+    - name: Open SNMP ports in firewalld
+      firewalld:
+        service: snmp
+        permanent: true
+        state: enabled
+        immediate: true
+
+    - name: Enable and start SNMP service
+      service:
+        name: snmpd
+        state: started
+        enabled: true
+
+    - name: Restart SNMP service to apply changes
+      service:
+        name: snmpd
+        state: restarted
+
+
+
