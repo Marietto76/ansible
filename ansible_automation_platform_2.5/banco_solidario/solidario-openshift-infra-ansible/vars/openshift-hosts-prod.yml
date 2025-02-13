@@ -1,0 +1,8 @@
+---
+ansible_hosts:
+  - hostname: SRVUIOPRANS03
+    role: gateway
+    ip_address: 10.110.3.110
+  - hostname: SRVUIOPRANS04
+    role: gateway
+    ip_address: 10.110.3.111

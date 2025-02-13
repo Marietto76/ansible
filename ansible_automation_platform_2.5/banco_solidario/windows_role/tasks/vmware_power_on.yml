@@ -1,0 +1,26 @@
+#-----
+- name: Set the state of a virtual machine to poweron
+  hosts: vcenter
+  vars:
+    guest_name: "windows server client"
+    datacenter_name: "datacenter"
+    folder: "windows server client"
+
+    vmware:
+      vcenter_hostname: 'vcenter.openshift.daytwo.cloud'
+      vcenter_username: 'Administrator@vsphere.local'
+      vcenter_password: 'VMware1!'
+
+  tasks:
+
+    - name: turn on vmware machine
+      community.vmware.vmware_guest_powerstate:
+        hostname: "{{ vmware.vcenter_hostname }}"
+        username: "{{ vmware.vcenter_username }}"
+        password: "{{ vmware.vcenter_password }}"
+        folder: "/{{ cloned.datacenter }}/{{folder}}"
+        name: "{{ guest_name }}"
+        state: powered-on
+      delegate_to: localhost
+      register: deploy
+

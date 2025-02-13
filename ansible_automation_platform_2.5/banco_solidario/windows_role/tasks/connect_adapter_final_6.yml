@@ -1,0 +1,16 @@
+- name: Connect network adapter
+  community.vmware.vmware_guest:
+    hostname: "{{ vmware.vcenter_hostname }}"
+    username: "{{ vmware.vcenter_username }}"
+    password: "{{ vmware.vcenter_password }}"
+    datacenter: "{{ cloned.datacenter }}"
+    validate_certs: false
+    name: "{{ cloned.vm_name }}"
+    networks:
+    - name: "{{ cloned.vm_network }}"
+      connected: true
+      start_connected: true
+  register: adapter_result
+- name: Show result of VM clone
+  debug:
+    msg: "VM Clone Status: {{ adapter_result }}"

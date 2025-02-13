@@ -1,0 +1,6 @@
+---
+- name: Configure NFS
+  hosts: nfs
+  roles:
+    - common
+    - nfs

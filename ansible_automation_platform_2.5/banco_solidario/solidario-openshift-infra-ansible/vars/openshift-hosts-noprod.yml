@@ -1,0 +1,20 @@
+---
+openshift_hosts:
+  - hostname: bootstrap
+    role: bootstrap
+    ip_address: 192.168.40.103
+  - hostname: master0
+    role: master
+    ip_address: 192.168.40.105
+  - hostname: master1
+    role: master
+    ip_address: 192.168.40.106
+  - hostname: master2
+    role: master
+    ip_address: 192.168.40.107
+  - hostname: worker0
+    role: worker
+    ip_address: 192.168.40.110
+  - hostname: worker1
+    role: worker
+    ip_address: 192.168.40.111

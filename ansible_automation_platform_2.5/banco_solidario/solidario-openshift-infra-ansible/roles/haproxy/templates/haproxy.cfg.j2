@@ -1,0 +1,69 @@
+global
+    log         127.0.0.1 local2
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy
+    group       haproxy
+    daemon
+    stats socket /var/lib/haproxy/stats
+
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+
+listen stats
+    bind :9000
+    mode http
+    stats enable
+    stats uri /
+    monitor-uri /healthz
+
+
+# Aap25 Ingress
+frontend ingress_http
+    bind *:80
+    mode http
+    option httplog
+    default_backend ingress_http
+
+backend ingress_http
+    mode http
+    balance roundrobin
+{% for item in ansible_hosts %}
+{% if item.role == 'gateway' %}
+    server {{ item.hostname }} {{ item.ip_address }}:80 check
+{% endif %}
+{% endfor %}
+
+##Aap25 Ingress secure
+
+frontend ingress_https
+    bind *:443 ssl crt /etc/haproxy/certs/custom_ca_cert.crt
+    mode tcp
+    option tcplog
+    default_backend ingress_https
+
+backend ingress_https
+    balance roundrobin
+    mode tcp
+    option ssl-hello-chk
+{% for item in ansible_hosts %}
+{% if item.role == 'gateway' %}
+    server {{ item.hostname }} {{ item.ip_address }}:443 check
+{% endif %}
+{% endfor %}

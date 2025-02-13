@@ -1,0 +1,44 @@
+- name: Clone a VM
+  community.vmware.vmware_guest:
+    hostname: "{{ vmware.vcenter_hostname }}"
+    username: "{{ vmware.vcenter_username }}"
+    password: "{{ vmware.vcenter_password }}"
+    datacenter: "{{ source.datacenter }}"
+    cluster: "{{ source.cluster }}"
+    folder: "{{ cloned.folder }}"
+    validate_certs: false
+    template: "{{ source.vm_name }}"
+    name: "{{ cloned.vm_name }}"
+  delegate_to: localhost
+
+
+- name: Disconnect network adapter
+  community.vmware.vmware_guest:
+    hostname: "{{ vmware.vcenter_hostname }}"
+    username: "{{ vmware.vcenter_username }}"
+    password: "{{ vmware.vcenter_password }}"
+    datacenter: "{{ cloned.datacenter }}"
+    validate_certs: false
+    name: "{{ cloned.vm_name }}"
+    networks:
+    - name: "{{cloned.vm_network}}"
+      start_connected: false
+  register: adapter_result
+- name: Show result of VM clone
+  debug:
+    msg: "Disconnect adapter status: {{ adapter_result }}"
+
+
+
+- name: turn on vmware machine
+  community.vmware.vmware_guest_powerstate:
+    hostname: "{{ vmware.vcenter_hostname }}"
+    username: "{{ vmware.vcenter_username }}"
+    password: "{{ vmware.vcenter_password }}"
+    validate_certs: false
+    name: "{{ cloned.vm_name }}"
+    state: powered-on
+  delegate_to: localhost
+  register: deploy
+
+  

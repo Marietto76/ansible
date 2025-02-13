@@ -1,0 +1,8 @@
+haproxy:
+  hosts:
+    haproxy-1:
+      ansible_host: 192.168.40.101
+nfs:
+  hosts:
+    nfs-1:
+      ansible_host: 192.168.40.120

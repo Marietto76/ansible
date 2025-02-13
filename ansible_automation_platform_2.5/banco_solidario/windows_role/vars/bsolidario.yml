@@ -1,0 +1,65 @@
+## Conexión al vmware.
+
+
+###!!! no te olvides cambiar el adapter type y el ..files del sysrep y el AD\ del ad account!!
+###tambien colocar las "" en lugar de la '' y en unjoin playbook colocar securestring2 password2
+
+##vmware daytwo
+vcenter_validate_certs: false
+
+vmware:
+  vcenter_hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+  vcenter_username: '{{ lookup("env", "VMWARE_USER") }}'
+  vcenter_password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+  datacenter: "BS_UIO"
+  cluster: "BS_PRO"
+  vcenter_validate_certs: false
+  datastore:  ''
+
+windows:
+  ad_account: "AD\\Administrator"
+  ad_account_password: "RedHat1!"
+  local_account: "Administrator"
+  local_account_password: "RedHat1!"
+  arbol: "ad.bscluster.int"
+  domain_ou_path: "CN=computers,DC=ad,DC=bscluster,DC=int"
+
+###original machine
+source:
+  vm_name: "{{ survey_vm_name_to_clone }}"
+  folder: "{{ survey_vm_folder }}"
+  datacenter: "BS_UIO"
+  cluster: "BS_PRO"
+
+####cloned machine
+
+cloned:
+  vm_name: "{{ survey_vm_cloned_name }}"
+  network: "{{ survey_vm_portgroup }}"
+  datastore: "{{ survey_vm_datastore }}"
+  disk: ""
+  hardware: ""
+  folder: "DayTwo"
+  ip_address: "192.168.67.101"
+  default_gateway: "192.168.67.1"
+  prefixlength: "24"
+  dns_server: "192.168.67.230"
+  interface_alias: Ethernet0
+
+
+
+#1.  variables de conectarme al vmware
+#2.  variables de la vm a clonar.
+#3.  variables de la vm clonada.
+#
+#
+#
+#4. credenciales.
+#  vmware_ guardada en ansible.
+  
+
+    
+ 
+  
+
+

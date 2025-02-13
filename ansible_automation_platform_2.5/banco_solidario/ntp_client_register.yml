@@ -1,0 +1,54 @@
+---
+- name: Configure NTP Server on RHEL 9
+  hosts: all
+  become: true
+  vars:
+    ntp_config_file: /etc/chrony.conf
+    ntp_service_name: chronyd
+    ntp_servers:
+      - 10.1.1.215
+      - 10.1.1.216
+
+  tasks:
+    - name: Ensure chrony is installed
+      yum:
+        name: chrony
+        state: latest
+
+    - name: Backup existing Chrony configuration
+      copy:
+        src: "{{ ntp_config_file }}"
+        dest: "{{ ntp_config_file }}.backup"
+        remote_src: yes
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Comment out pool entries in Chrony configuration
+      lineinfile:
+        path: "{{ ntp_config_file }}"
+        regexp: "^pool"
+        line: "# &"
+
+    - name: Configure NTP servers
+      blockinfile:
+        path: "{{ ntp_config_file }}"
+        block: |
+          # Ansible managed custom NTP server configuration
+          {% for server in ntp_servers %}
+          server {{ server }} iburst
+          {% endfor %}
+        create: no
+      loop: "{{ ntp_servers }}"
+      notify: Restart NTP Service
+
+    - name: Enable and start Chrony service
+      systemd:
+        name: "{{ ntp_service_name }}"
+        enabled: true
+        state: started
+
+  handlers:
+    - name: Restart NTP Service
+      systemd:
+        name: "{{ ntp_service_name }}"
+        state: restarted
+

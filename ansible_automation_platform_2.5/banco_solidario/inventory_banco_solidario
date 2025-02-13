@@ -9,32 +9,26 @@
 [automationgateway]
 SRVUIOPRANS03.bscluster.int
 SRVUIOPRANS04.bscluster.int
-#gateway2.example.org
+
 
 # This section is for your AAP Controller host(s)
 # -----------------------------------------------------
 [automationcontroller]
 SRVUIOPRANS09.bscluster.int
 SRVUIOPRANS10.bscluster.int
-#controller1.example.org
-#controller2.example.org
+
 
 # This section is for your AAP Execution host(s)
 # -----------------------------------------------------
 [execution_nodes]
 SRVUIOPRANS11.bscluster.int
 SRVUIOPRANS12.bscluster.int
-#hop1.example.org receptor_type='hop'
-#exec1.example.org
-#exec2.example.org
 
 # This section is for your AAP Automation Hub host(s)
 # -----------------------------------------------------
 [automationhub]
 SRVUIOPRANS05.bscluster.int
 SRVUIOPRANS06.bscluster.int
-#hub1.example.org
-#hub2.example.org
 
 # This section is for your AAP EDA Controller host(s)
 # -----------------------------------------------------
@@ -42,32 +36,37 @@ SRVUIOPRANS06.bscluster.int
 SRVUIOPRANS07.bscluster.int
 SRVUIOPRANS08.bscluster.int
 
-#eda1.example.org
-#eda2.example.org
+
 
 [redis]
+###GATEWAYS
 SRVUIOPRANS03.bscluster.int
 SRVUIOPRANS04.bscluster.int
-#gateway1.example.org
-#gateway2.example.org
+###HUB
 SRVUIOPRANS05.bscluster.int
 SRVUIOPRANS06.bscluster.int
-#hub1.example.org
-#hub2.example.org
+##EDA
 SRVUIOPRANS07.bscluster.int
 SRVUIOPRANS08.bscluster.int
 
-#eda1.example.org
-#eda2.example.org
+
 
 [all:vars]
 
 # Common variables
 # https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation/appendix-inventory-files-vars#ref-general-inventory-variables
 # -----------------------------------------------------
+#
+# 
+
+custom_ca_cert=/home/ansible/redhatpackages/apps.crt
+#gateway_main_url=https://SRVUIOPRANS02.bscluster.int  se lo dejó comentado
+#variable que configura el nfs en el par de automation hubs
+hub_shared_data_path=10.110.3.121:/var/exports
+
 
 postgresql_admin_username=postgres
-postgresql_admin_password=soporte12345678
+postgresql_admin_password=xxxxxxx
 bundle_install=true
 # The bundle directory must include /bundle in the path
 bundle_dir=/home/ansible/redhatpackages/ansible-automation-platform-containerized-setup-bundle-2.5-2.1-x86_64/bundle
@@ -76,20 +75,20 @@ bundle_dir=/home/ansible/redhatpackages/ansible-automation-platform-containerize
 # AAP Gateway
 # https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation/appendix-inventory-files-vars#ref-gateway-variables
 # -----------------------------------------------------
-gateway_admin_password=soporte
+gateway_admin_password=xxxxx
 gateway_pg_host=SRVUIOPRANS13.bscluster.int
 gateway_pg_database=gatewaydb
-gateway_pg_username=daytwo
-gateway_pg_password=soporte12345678
+gateway_pg_username=anbsolidario
+gateway_pg_password=xxxxxxxxxx
 
 # AAP Controller
 # https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation/appendix-inventory-files-vars#ref-controller-variables
 # -----------------------------------------------------
-controller_admin_password=soporte
+controller_admin_password=xxxxx
 controller_pg_host=SRVUIOPRANS13.bscluster.int
 controller_pg_database=controllerdb
-controller_pg_username=daytwo
-controller_pg_password=soporte12345678
+controller_pg_username=anbsolidario
+controller_pg_password=xxxxxxx
 
 
 controller_license_file=/home/ansible/redhatpackages/ansible-automation-platform-containerized-setup-bundle-2.5-2.1-x86_64/manifest_ansible_manifest_20241023T144949Z.zip
@@ -97,17 +96,17 @@ controller_license_file=/home/ansible/redhatpackages/ansible-automation-platform
 # AAP Automation Hub
 # https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation/appendix-inventory-files-vars#ref-hub-variables
 # -----------------------------------------------------
-hub_admin_password=soporte
+hub_admin_password=XXXXXXXXX
 hub_pg_host=SRVUIOPRANS13.bscluster.int
 hub_pg_database=automationhubdb
-hub_pg_username=daytwo
-hub_pg_password=soporte12345678
+hub_pg_username=anbsolidario
+hub_pg_password=xxxxxx
 
 # AAP EDA Controller
 # https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation/appendix-inventory-files-vars#event-driven-ansible-controller
 # -----------------------------------------------------
-eda_admin_password=soporte
+eda_admin_password=xxxxxxx
 eda_pg_host=SRVUIOPRANS13.bscluster.int
 eda_pg_database=eventdrivendb
-eda_pg_username=daytwo
-eda_pg_password=soporte12345678
+eda_pg_username=anbsolidario
+eda_pg_password=xxxxx

@@ -1,0 +1,19 @@
+---
+- name: Clean /tmp partition of directories starting with "ansible"
+  hosts: all
+  become: yes
+  tasks:
+    - name: Find and remove directories starting with "ansible" in /tmp
+      find:
+        paths: /tmp
+        patterns: "ansible*"
+        file_type: directory
+      register: ansible_dirs
+
+    - name: Remove directories starting with "ansible"
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ ansible_dirs.files }}"
+      when: ansible_dirs.matched > 0
+

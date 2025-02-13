@@ -1,0 +1,23 @@
+- name: Execute script for join windows to domain controller
+  community.vmware.vmware_vm_shell:
+    hostname: "{{ vmware.vcenter_hostname }}"
+    username: "{{ vmware.vcenter_username }}"
+    password: "{{ vmware.vcenter_password }}"
+    validate_certs: false
+    vm_id: "{{ cloned.vm_name }}"
+    vm_username: "{{ windows.local_account}}"
+    vm_password: "{{ windows.local_account_password }}"
+    vm_shell: "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+    vm_shell_args: "-Command $Username = '{{ windows.ad_account }}';
+    $Username2 = '{{ windows.local_account }}';
+    New-Item -ItemType Directory -Path C:\\testdirectory222;
+    $Password = '{{ windows.ad_account_password }}';
+    $Password2 = '{{ windows.local_account_password }}';
+    $pass = ConvertTo-SecureString -AsPlainText $Password -Force;
+    $pass2 = ConvertTo-SecureString -AsPlainText $Password2 -Force;
+    $SecureString = $pass;
+    $SecureString2 = $pass2;
+    $MySecureCreds = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $Username,$SecureString;
+    $Mylocal = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $Username2,$SecureString2;
+    Add-Computer -DomainName '{{ windows.arbol }}' -Credential $MySecureCreds
+    -Force -Restart;"

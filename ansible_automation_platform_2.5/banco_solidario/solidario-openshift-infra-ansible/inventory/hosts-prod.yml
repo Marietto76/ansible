@@ -1,0 +1,9 @@
+haproxy:
+  hosts:
+    haproxy-1:
+      ansible_host: SRVUIOPRANS02.bscluster.int
+
+nfs:
+  hosts:
+    nfs-1:
+      ansible_host: SRVUIOPRANS14.bscluster.int	

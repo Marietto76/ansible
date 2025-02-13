@@ -1,0 +1,13 @@
+
+    - name: Run basic PowerShell script
+      ansible.windows.win_powershell:
+        script: |
+          C:\Windows\System32\Sysprep\Sysprep.exe /generalize /oobe /shutdown
+        async: 0
+        poll: 0
+    
+    - name: Wait for system to shut down
+      pause:
+          seconds: 60  # Adjust based on expected shutdown time
+
+

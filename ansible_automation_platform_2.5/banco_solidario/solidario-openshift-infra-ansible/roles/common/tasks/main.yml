@@ -1,0 +1,25 @@
+---
+- name: Update
+  ansible.builtin.dnf:
+    name: '*'
+    state: latest
+  become: true
+
+- name: Install tools
+  ansible.builtin.dnf:
+    name: [bash-completion, rsync, tmux, tree, unzip, vim, wget]
+    state: installed
+  become: true
+
+- name: Install firewalld
+  ansible.builtin.dnf:
+    name: firewalld
+    state: installed
+  become: true
+
+- name: Start firewalld
+  ansible.builtin.service:
+    name: firewalld
+    enabled: yes
+    state: started
+  become: true

@@ -1,0 +1,29 @@
+- name: Set the state of a virtual machine to poweron
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    vcenter_validate_certs: false
+    guest_name: "windows server client solidario"
+    datacenter_name: "Datacenter"
+    folder: "DayTwo"
+    cluster: "Cluster"
+
+    vmware:
+      vcenter_hostname: 'vcenter.openshift.daytwo.cloud'
+      vcenter_username: 'Administrator@vsphere.local'
+      vcenter_password: 'VMware1!'
+
+  tasks:
+    - name: Execute script inside offline Windows VM
+      community.vmware.vmware_vm_shell:
+        hostname: "{{ vmware.vcenter_hostname }}"
+        username: "{{ vmware.vcenter_username }}"
+        password: "{{ vmware.vcenter_password }}"
+        validate_certs: false
+        vm_id: "{{ guest_name }}"
+        vm_username: "Administrator"
+        vm_password: "RedHat1!"
+        vm_shell: "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+        vm_shell_args: "-Command New-Item -ItemType Directory -Path C:\\testdirectory; New-Item -ItemType File -Path C:\\testdirectory\\testfile.txt"
+

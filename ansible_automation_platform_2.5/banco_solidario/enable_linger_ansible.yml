@@ -1,0 +1,11 @@
+---
+- name: Enable lingering for ansible user
+  hosts: aap_25_nodes  # Define the hosts or group of hosts
+  become: true
+  tasks:
+    - name: Enable lingering for ansible user
+      command: loginctl enable-linger ansible
+      become_user: root
+      args:
+        creates: /var/lib/systemd/linger/ansible  # Prevents running if lingering is already enabled
+

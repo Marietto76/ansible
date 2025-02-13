@@ -1,0 +1,9 @@
+    - name: Run Sysprep
+      win_command: >
+        Get-NetIpAddress -InterfaceAlias 'Ethernet0' | New-NetIpAddress -IpAddress 192.168.67.200 -PrefixLength 24 -DefaultGateway 192.168.67.1
+      async: 20
+      poll: 0
+
+    - name: Wait for system to shut down
+      pause:
+          seconds: 60  # Adjust based on expected shutdown time

@@ -1,0 +1,21 @@
+---
+- name: Configure NTP Server on RHEL 9
+  hosts: localhost
+  become: true
+  vars:
+    ntp_config_file: /etc/chrony.conf
+    ntp_service_name: chronyd
+    ntp_servers:
+      - 10.1.1.215
+      - 10.1.1.216
+
+  tasks:
+
+    - name: Comment out pool entries in Chrony configuration
+      lineinfile:
+        path: "{{ ntp_config_file }}"
+        insertbefore: ''
+        regexp: "^pool"
+        line: "# &"
+
+

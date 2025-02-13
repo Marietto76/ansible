@@ -1,0 +1,44 @@
+---
+- name: Install haproxy
+  ansible.builtin.dnf:
+    name: haproxy
+    state: present
+  become: true
+
+- name: Install python3-libsemanage
+  ansible.builtin.dnf:
+    name: python3-libsemanage
+    state: present
+  become: true
+
+- name: Allow HAProxy to listen on ports 6443, 22623, 8080 and 8443
+  ansible.posix.seboolean:
+    name: haproxy_connect_any
+    state: yes
+    persistent: yes
+  become: true
+
+- name: Enable HAProxy ports
+  ansible.posix.firewalld:
+    port: "{{ item }}/tcp"
+    permanent: yes
+    immediate: yes
+    state: enabled
+  with_items:
+    - 80
+    - 443
+  become: true
+
+- name: Generate HAProxy config
+  ansible.builtin.template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+  notify: restart haproxy
+  become: true
+
+- name: Start HAProxy
+  ansible.builtin.service:
+    name: haproxy
+    enabled: yes
+    state: started
+  become: true

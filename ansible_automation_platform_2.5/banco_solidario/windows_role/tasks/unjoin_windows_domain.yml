@@ -1,0 +1,13 @@
+
+
+    - name: Unjoin host  with automatic reboot
+      microsoft.ad.membership:
+        state: workgroup
+        domain_admin_user: "{{ win_domain_admin_user  }}"
+        domain_admin_password: "{{ win_domain_admin_password }}"
+        workgroup_name: WORKGROUP
+        reboot: true
+      register: domain_removal
+
+
+

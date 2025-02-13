@@ -41,7 +41,7 @@
       name: automationhubdb
       comment: My automation hub db
 
-  - name: Create a new database with name "automationhubdb"
+  - name: Create a new database with name "eventdrivendb"
     
     become: yes
     community.postgresql.postgresql_db:
@@ -49,14 +49,14 @@
       comment: My eventdrivendb
 
 
-  - name: Create a new database with name "automationhubdb"
+  - name: Create a new database with name "gatewaydb"
     become_user: postgres
     become: yes
     community.postgresql.postgresql_db:
       name: gatewaydb
       comment: My gatewaydb
 
-  - name: Create a new database with name "automationhubdb"
+  - name: Create a new database with name "controllerdb"
     community.postgresql.postgresql_db:
       name: controllerdb
       comment: My controller db

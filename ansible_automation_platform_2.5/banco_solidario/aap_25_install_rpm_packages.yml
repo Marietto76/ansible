@@ -14,4 +14,3 @@
           - vim
           - python3
         state: present
-

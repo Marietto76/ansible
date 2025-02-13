@@ -1,33 +1,42 @@
 ------
+[localhost]
+192.168.100.207
+
 [aap_postgres]
 10.110.3.120
 
 [aap_haproxy]
 SRVUIOPRANS02.bscluster.int
 
-[aap_kvm_25]
-
+[aap_25_nodes]
+##gateway
 SRVUIOPRANS03.bscluster.int
 SRVUIOPRANS04.bscluster.int
+
+##controller
 
 SRVUIOPRANS09.bscluster.int
 SRVUIOPRANS10.bscluster.int
 
+##execution
 SRVUIOPRANS11.bscluster.int
 SRVUIOPRANS12.bscluster.int
 
+#aap hub
 
 SRVUIOPRANS05.bscluster.int
 SRVUIOPRANS06.bscluster.int
 
+##eda
 
 SRVUIOPRANS07.bscluster.int
 SRVUIOPRANS08.bscluster.int
 
-
+#postgresql
 SRVUIOPRANS13.bscluster.int
 SRVUIOPRANS14.bscluster.int
 
+##haproxy
 SRVUIOPRANS02.bscluster.int
 
 
