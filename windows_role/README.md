@@ -3,6 +3,18 @@ Role Name
 
 A brief description of the role goes here.
 
+
+How to run this playbook
+=================================
+
+
+ansible-playbook  -e "ambiente=day2_local_lab" main.yml
+
+ansible-playbook  -e "ambiente=day2_local_lab" test_individual_tasks.yml
+
+
+
+
 Requirements
 ------------
 
